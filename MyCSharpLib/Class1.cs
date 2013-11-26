@@ -4,7 +4,7 @@ namespace MyCSharpLib
 {
     public static class Class1
     {
-        public static int Multiply(int x, int y) { return x * y; }
+        public static double Multiply(double x, double y) { return x * y; }
 
         public static void Cleanup()
         {

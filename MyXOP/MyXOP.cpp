@@ -5,26 +5,24 @@
 
 
 
-
-
-
 /*
 	Define functions to export, and their parameter structures, here
 */
 
-#include "XOPStructureAlignmentTwoByte.h"	// All structures passed to Igor are two-byte aligned.
+#pragma pack(push, 2)	// All structures passed to Igor are two-byte aligned.
 typedef struct {
 	double p2;
 	double p1;
 	double result;
 } MyFuncParams;
-#include "XOPStructureAlignmentReset.h"
+#pragma pack(pop)
 
 
 static int MyFunc(MyFuncParams* p)
 {
 	// call the static C# method.
-	p->result = MyCSharpLib::Class1::Multiply(p->p1, p->p2);
+	double result = MyCSharpLib::Class1::Multiply(p->p1, p->p2);
+	p->result = result;
 
 	// you could also allocate objects and do logic directly, here, in C++/CLI,
 	// but it is probably easier and safer to manage state in C#.
