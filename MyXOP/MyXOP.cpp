@@ -9,13 +9,13 @@
 	Define functions to export, and their parameter structures, here
 */
 
-#pragma pack(push, 2)	// All structures passed to Igor are two-byte aligned.
+#pragma pack(2)	// All structures passed to Igor are two-byte aligned.
 typedef struct {
 	double p2;
 	double p1;
 	double result;
 } MyFuncParams;
-#pragma pack(pop)
+#pragma pack()
 
 
 static int MyFunc(MyFuncParams* p)
@@ -35,14 +35,14 @@ static int MyFunc(MyFuncParams* p)
 
 
 // returns function pointers for each exported function
-static long RegisterFunction()
+static XOPIORecResult RegisterFunction()
 {
 	int funcIndex;
 
 	funcIndex = GetXOPItem(0);	/* which function are we getting the address of? */
 	switch (funcIndex) {
 		case 0:	
-			return((long)MyFunc);  // Note: This is NOT 64-bit safe
+			return((XOPIORecResult)MyFunc);  // This should now be 64-bit safe
 			break;
 		// add more cases for more exported functions here
 		// be sure to also add them to the XOPExports.rc resource file
@@ -68,7 +68,7 @@ static void GlobalSetup()
 }
 
 // called when the XOP is about to be unloaded by Igor
-static long GlobalCleanup() 
+static XOPIORecResult GlobalCleanup() 
 {
 	// do cleanup of any remaining managed code
 	MyCSharpLib::Class1::Cleanup();
@@ -78,17 +78,13 @@ static long GlobalCleanup()
 
 
 
-
-
-
-
 // Igor passes messages into here
 // It is called first to get the function pointers for all functions in the resource file
 // and then is called periodically for idle, window messages, etc.  See XOP Toolkit Docs.
 static void XOPEntry(void)
 {	
-	long result = 0;
-	long msg = GetXOPMessage();
+	XOPIORecResult result = 0;
+	XOPIORecResult msg = GetXOPMessage();
 
 	if (msg == FUNCADDRS)
 		result = RegisterFunction();
@@ -102,15 +98,19 @@ static void XOPEntry(void)
 
 
 // initial entry point, sets up XOP support stuff, does version check
-HOST_IMPORT void main(IORecHandle ioRecHandle)
+HOST_IMPORT int XOPMain(IORecHandle ioRecHandle)
 {	
 	XOPInit(ioRecHandle);	// do standard XOP initialization
 	SetXOPEntry(XOPEntry);	// set entry point for future calls
 
 	GlobalSetup();
 
-	if (igorVersion < 500)
-		SetXOPResult(REQUIRES_IGOR_500);
-	else
-		SetXOPResult(0L);
+	if (igorVersion < 620)
+	{
+		SetXOPResult(REQUIRES_IGOR_620);
+		return EXIT_FAILURE;
+	}
+
+	SetXOPResult(0L);
+	return EXIT_SUCCESS;
 }
