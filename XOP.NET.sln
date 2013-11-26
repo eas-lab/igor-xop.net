@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E6AE299-6AEA-4007-8121-EB6165C2EB1E}"
 	ProjectSection(SolutionItems) = preProject
-		Readme.txt = Readme.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCSharpLib", "MyCSharpLib\MyCSharpLib.csproj", "{DF93B984-BB29-4BE1-B28F-7E3A021EF909}"

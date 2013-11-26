@@ -7,11 +7,11 @@ on [IgorExchange](http://www.igorexchange.com/)
 It is a barebones Visual Studio 2012 solution for an 
 [Igor Pro](http://www.wavemetrics.com/products/igorpro/igorpro.htm) XOP that calls C# (.NET) code in a separate library.
 
-It was originally written to work on Igor 5, but I'm in the process of updating it for Igor 6.3.
+It was originally written to work on Igor 5 and I've now updated it for Igor 6.3.
 
-To use it, you'll need to be familiar with both .NET and XOP programming,
-and you'll need to write a little bit of C++/CLI, Microsoft's C++ -like language 
-that lets you mix managed .NET code with traditional C++.
+To use it, you'll need to already be familiar with both .NET and XOP programming,
+and you'll need to write a little bit of [C++/CLI](http://en.wikipedia.org/wiki/C++/CLI), 
+Microsoft's C++ -like language that lets you mix managed .NET code with traditional C++.
 
 The basic idea is to compile the XOP as a C++/CLI project, and in places where the XOP
 functions are executed, put in C++/CLI calls to the external C# code.  You can see an
@@ -21,12 +21,11 @@ example of this in the MyFunc function in MyXOP/MyXOP.cpp
 ###To build and test
  1. Make sure you've built the XOPSupport project in your XOP Toolkit folder
  2. Set an environment variable called XOPSupport to point to the XOPSupport directory
-    and ensure that both Igor.lib and XOPSupport.lib are in that directory.
-    The project files here use that variable to locate headers and libraries.
- 3. Build this solution.  It will put MyCSharpLib.dll and MyXOP.xop in XOP.NET\output
- 4. In your Igor Extensions folder, make a shortcut to MyXOP.xop.
- 5. Start Igor
- 6. Enter the following command
+ 3. Copy `Igor.lib`, `XOPSupport.lib`, and `vc90.pdb` into the local `lib` directory.
+ 4. Build this solution.  It will put MyCSharpLib.dll and MyXOP.xop in XOP.NET\output
+ 5. In your Igor Extensions folder, make a shortcut to MyXOP.xop.
+ 6. Start Igor
+ 7. Enter the following command
  
         Print MyFunc(6,7)
 
