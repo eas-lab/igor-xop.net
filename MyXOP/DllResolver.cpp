@@ -18,7 +18,12 @@ ref class DllResolver
 		// so get the DisplayName and append .dll 
 		String^ dllName = args->Name->Split(',')[0] + ".dll"; 
 		String^ fullPath = System::IO::Path::Combine(BaseDirectory, dllName);
-		return Assembly::LoadFrom(fullPath);
+
+		// Framework will trigger this handler for dllname.resources.dll 
+		// which we don't build, so we need to swallow the exception
+		// See http://social.msdn.microsoft.com/Forums/vstudio/en-US/32e458a1-7443-4309-a054-8839b33dfd4f/framework-40-dll-loaded-by-a-20-executable-cannot-find-xxxxresourcesdll?forum=netfxbcl
+		try { return Assembly::LoadFrom(fullPath); }
+		catch(System::IO::FileNotFoundException^) {	return nullptr; }
 	}
 
 public:
